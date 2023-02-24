@@ -44,7 +44,7 @@ public class TargetScript : MonoBehaviour {
 				audioSource.Play();
 
 				//Start the timer
-				StartCoroutine(DelayTimer());
+				//StartCoroutine(DelayTimer());
 				routineStarted = true;
 			} 
 		}

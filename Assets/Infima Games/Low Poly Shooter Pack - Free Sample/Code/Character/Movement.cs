@@ -71,6 +71,9 @@ namespace InfimaGames.LowPolyShooterPack
 
         private float maxJumpTimes = 2;
         private float jumpsRemaining = 0;
+
+        private RaycastHit slopeHit;
+        private Vector3 slopeMoveDirection;
         
         /// <summary>
         /// Player Character.
@@ -178,6 +181,8 @@ namespace InfimaGames.LowPolyShooterPack
             //Calculate local-space direction by using the player's input.
             var movement = new Vector3(frameInput.x, 0.0f, frameInput.y);
             
+            slopeMoveDirection = Vector3.ProjectOnPlane(movement, slopeHit.normal);
+            
             //Running speed calculation.
             if(playerCharacter.IsRunning())
                 movement *= speedRunning;
@@ -187,9 +192,17 @@ namespace InfimaGames.LowPolyShooterPack
                 movement *= speedWalking;
             }
 
+            if (OnSlope())
+            {
+                // movement = slopeMoveDirection.normalized * speedWalking;
+                Debug.Log("slope");
+            }
+            
             //World space velocity calculation. This allows us to add it to the rigidbody's velocity properly.
             movement = transform.TransformDirection(movement);
 
+            
+            
             #endregion
             
             //Update Velocity.
@@ -225,6 +238,23 @@ namespace InfimaGames.LowPolyShooterPack
             {
                 capsule.height = _normalHeight;
             }
+        }
+
+        public bool OnSlope()
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, capsule.height / 2 + 0.5f))
+            {
+                if (slopeHit.normal != Vector3.up)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         public void Jump()
