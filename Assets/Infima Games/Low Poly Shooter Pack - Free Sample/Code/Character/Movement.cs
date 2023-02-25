@@ -69,7 +69,7 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         private bool grounded;
 
-        private float maxJumpTimes = 2;
+        private float maxJumpTimes = 1;
         private float jumpsRemaining = 0;
 
         private RaycastHit slopeHit;
